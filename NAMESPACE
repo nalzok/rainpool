@@ -1,0 +1,3 @@
+useDynLib(rainpool, .registration=TRUE)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
