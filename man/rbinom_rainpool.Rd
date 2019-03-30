@@ -14,12 +14,6 @@ rbinom.rainpool(n, size, prob)
 Yield n pseudorandom numbers from Binom(size, prob) with the Rainpool algorithm.
 }
 \examples{
-size <- 128
-prob <- 0.015625
-
-result.rainpool <- rbinom.rainpool(1000, size, prob)
-result.native <- rbinom(1000, size, prob)
-
 goodness.of.fit.test <- function(x, size0, prob0) {
   x.count <- rep(0, size0 + 1)
   x.table <- table(x)
@@ -34,6 +28,22 @@ goodness.of.fit.test <- function(x, size0, prob0) {
   chisq.test(x.count, p = E/sum(E), simulate.p.value = TRUE)
 }
 
-goodness.of.fit.test(result.rainpool, size, prob)
-goodness.of.fit.test(result.native, size, prob)
+n <- 1E5
+size <- 64
+prob <- 0.5
+
+if (require(microbenchmark, quietly = TRUE)) {
+  tm <- microbenchmark(
+    native <- rbinom(n, size, prob),
+    rainpool <- rbinom.rainpool(n, size, prob))
+  boxplot(tm)
+} else {
+  native <- rbinom(n, size, prob)
+  rainpool <- rbinom.rainpool(n)
+}
+
+\dontrun{
+  goodness.of.fit.test(native, size, prob)
+  goodness.of.fit.test(rainpool, size, prob)
+}
 }

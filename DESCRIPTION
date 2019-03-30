@@ -8,4 +8,5 @@ Description: An experimential PRNG to replace stats::rbinom when the size parame
 License: GPL (>= 2)
 Encoding: UTF-8
 Imports: Rcpp (>= 0.12.18)
+Suggests: microbenchmark
 LinkingTo: Rcpp, dqrng
