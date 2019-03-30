@@ -15,7 +15,7 @@ Yield n pseudorandom numbers from Binom(size, prob) with the Rainpool algorithm.
 }
 \examples{
 size <- 128
-prob <- 0.0625
+prob <- 0.015625
 
 result.rainpool <- rbinom.rainpool(1000, size, prob)
 result.native <- rbinom(1000, size, prob)
@@ -24,17 +24,14 @@ goodness.of.fit.test <- function(x, size0, prob0) {
   x.count <- rep(0, size0 + 1)
   x.table <- table(x)
   x.count[as.numeric((names(x.table))) + 1] <- unname(x.table)
+  
+  # merge bins with less than 5 observations
   E <- length(x) * dbinom(0:size0, size0, prob0)
-
-  # merge all slots with expectation < 5 into E[size0 + 2]
   E.lesser <- (E < 5)
-  E[size0 + 2] <- sum(E[E.lesser])
-  x.count[size0 + 2] <- sum(x.count[E.lesser])
-  x.count[E.lesser] <- E[E.lesser]
-
-  Q <- sum((x.count - E) ^ 2 / E)
-  df <- size0 - sum(E.lesser)
-  1 - pchisq(Q, df)
+  x.count <- c(x.count[!E.lesser], sum(x.count[E.lesser]))
+  E <- c(E[!E.lesser], sum(E[E.lesser]))
+  
+  chisq.test(x.count, p = E/sum(E), simulate.p.value = TRUE)
 }
 
 goodness.of.fit.test(result.rainpool, size, prob)
