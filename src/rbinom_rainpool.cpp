@@ -17,6 +17,7 @@ Rcpp::NumericVector rbinom_rainpool(Rcpp::NumericVector n,
                                     Rcpp::NumericVector p);
 int rbinom_rainpool_scalar(int size, double p);
 int rbinom_rainpool_01(int size);
+int64_t get_random();
 
 // [[Rcpp::export]]
 void set_seed_rainpool(Rcpp::IntegerVector seed) {
@@ -27,8 +28,16 @@ void set_seed_rainpool(Rcpp::IntegerVector seed) {
 Rcpp::NumericVector rbinom_rainpool(Rcpp::NumericVector n,
                                     Rcpp::NumericVector size,
                                     Rcpp::NumericVector prob) {
-  int rep_times = n.size();
+  int rep_times = n.size() > 1 ? n.size() : n[0];
   Rcpp::NumericVector result(rep_times);
+  
+  if (size.size() < rep_times) {
+    size = Rcpp::rep_len(size, rep_times);
+  }
+  if (prob.size() < rep_times) {
+    prob = Rcpp::rep_len(prob, rep_times);
+  }
+
   for (int i = 0; i < rep_times; i += 1) {
     if(i % 1000 == 0) {
       Rcpp::checkUserInterrupt();

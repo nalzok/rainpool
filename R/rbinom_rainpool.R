@@ -3,9 +3,8 @@ set.seed.rainpool <- function(seed) {
 }
 
 rbinom.rainpool <- function(n, size, prob) {
-  if (length(n) == 1) {
-    n = rep(0, n);
+  if (length(n) == 0) {
+    return(numeric(0))
   }
-  df <- data.frame(n=n, size=size, prob=prob)
-  .Call("_rainpool_rbinom_rainpool", df$n, df$size, df$prob)
+  .Call("_rainpool_rbinom_rainpool", n, size, prob)
 }
