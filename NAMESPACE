@@ -1,3 +1,4 @@
 useDynLib(rainpool, .registration=TRUE)
-exportPattern("^[[:alpha:]]+")
+export("set.seed.rainpool")
+export("rbinom.rainpool")
 importFrom(Rcpp, evalCpp)

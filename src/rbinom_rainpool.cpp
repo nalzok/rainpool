@@ -7,15 +7,14 @@
 #include <xoshiro.h>
 #include <convert_seed.h>
 // [[Rcpp::plugins(cpp11)]]
-using namespace Rcpp;
 
 namespace {
   dqrng::xoshiro256plus rng{};
 }
 
-NumericVector rbinom_rainpool(NumericVector n,
-                              NumericVector size,
-                              NumericVector p);
+Rcpp::NumericVector rbinom_rainpool(Rcpp::NumericVector n,
+                                    Rcpp::NumericVector size,
+                                    Rcpp::NumericVector p);
 int rbinom_rainpool_scalar(int size, double p);
 int rbinom_rainpool_01(int size);
 
@@ -25,12 +24,15 @@ void set_seed_rainpool(Rcpp::IntegerVector seed) {
 }
 
 // [[Rcpp::export]]
-NumericVector rbinom_rainpool(NumericVector n,
-                              NumericVector size,
-                              NumericVector prob) {
+Rcpp::NumericVector rbinom_rainpool(Rcpp::NumericVector n,
+                                    Rcpp::NumericVector size,
+                                    Rcpp::NumericVector prob) {
   int rep_times = n.size();
   Rcpp::NumericVector result(rep_times);
   for (int i = 0; i < rep_times; i += 1) {
+    if(i % 1000 == 0) {
+      Rcpp::checkUserInterrupt();
+    }
     result[i] = rbinom_rainpool_scalar(size[i], prob[i]);
   }
 
@@ -38,7 +40,7 @@ NumericVector rbinom_rainpool(NumericVector n,
 }
 
 int rbinom_rainpool_scalar(int size, double p) {
-    if (size < 0 || isnan(p) || p < 0 || p > 1) {
+    if (size < 0 || std::isnan(p) || p < 0 || p > 1) {
         return -1;
     } else if (size == 0 || p == 0) {
         return 0;

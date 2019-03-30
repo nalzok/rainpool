@@ -16,14 +16,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // rbinom_rainpool
-NumericVector rbinom_rainpool(NumericVector n, NumericVector size, NumericVector prob);
+Rcpp::NumericVector rbinom_rainpool(Rcpp::NumericVector n, Rcpp::NumericVector size, Rcpp::NumericVector prob);
 RcppExport SEXP _rainpool_rbinom_rainpool(SEXP nSEXP, SEXP sizeSEXP, SEXP probSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type n(nSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type prob(probSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type n(nSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type prob(probSEXP);
     rcpp_result_gen = Rcpp::wrap(rbinom_rainpool(n, size, prob));
     return rcpp_result_gen;
 END_RCPP
